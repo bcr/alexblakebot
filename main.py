@@ -10,8 +10,12 @@ GPIO.setmode(GPIO.BCM)
 
 trig_pin = 23
 echo_pin = 24
+led_pin = 16
 
 try:
+	GPIO.setup(led_pin,GPIO.OUT)
+	GPIO.output(led_pin, GPIO.HIGH)
+
 	range_sensor = range.RangeSensor(trig_pin, echo_pin)
 
 	# Initialize distance sensor
