@@ -7,4 +7,4 @@ while True:
 	speed = input("Enter speed: ")
 	intspeed = int(speed)
 	print("Setting speed", intspeed)
-	ser.write(chr(intspeed).encode('iso-8859-1'))
+	ser.write(bytes([intspeed]))
