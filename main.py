@@ -44,7 +44,7 @@ try:
 			print("No red, man        ", end="\r")
 			pass
 		else:
-			vector = (((rect[0] + rect[2]) / 2) - 320) / 320
+			vector = (rect[0] + (rect[2] / 2) - 320) / 320
 			print("frame", frame_number, "vector", vector, "range", range, end="\r")
 
 		# Determine the new vector
