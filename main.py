@@ -5,12 +5,18 @@ import time
 
 import classifier
 import range
+import motor
 
 GPIO.setmode(GPIO.BCM)
 
 trig_pin = 23
 echo_pin = 24
 led_pin = 16
+
+motor = motor.MotorController()
+
+def clamp(n, minn, maxn):
+	return max(min(maxn, n), minn)
 
 try:
 	GPIO.setup(led_pin,GPIO.OUT)
@@ -41,15 +47,36 @@ try:
 
 		if rect is None:
 			# Don't see no red
-			print("No red, man        ", end="\r")
-			pass
+			vector = None
 		else:
+			# Determine the new vector
 			vector = (rect[0] + (rect[2] / 2) - 320) / 320
-			print("frame", frame_number, "vector", vector, "range", range, "rect", rect, end="\r")
 
-		# Determine the new vector
+		print("frame", frame_number, "vector", vector, "range", range, "rect", rect)
+
 		# Determine the new speed
-		# Set course for adventure
+		# As we get closer, slow down. So when we get to 25cm be stopped, slowing down over 100cm
+		speed = (range - 25) / 100
+		speed = clamp(speed, 0.0, 1.0)
+
+		if vector is not None:
+			# Figure out the motor inputs based on speed and vector
+			absvector = abs(vector)
+			speed_1 = absvector * speed
+			speed_2 = (1.0 - absvector) * speed
+
+			if (vector < 0):
+				left_motor_speed = speed_1
+				right_motor_speed = speed_2
+			else:
+				right_motor_speed = speed_1
+				left_motor_speed = speed_2
+
+			# Set course for adventure
+			print("left_motor_speed", left_motor_speed, "right_motor_speed", right_motor_speed)
+			motor.set_speed(left_motor_speed, right_motor_speed)
+		else:
+			motor.stop()
 
 		# Clear out for next frame
 		rawCapture.truncate(0)
@@ -57,4 +84,5 @@ try:
 		# Next frame
 		frame_number = frame_number + 1
 finally:
+	motor.stop()
 	GPIO.cleanup()
