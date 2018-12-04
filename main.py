@@ -45,7 +45,7 @@ try:
 			pass
 		else:
 			vector = (rect[0] + (rect[2] / 2) - 320) / 320
-			print("frame", frame_number, "vector", vector, "range", range, end="\r")
+			print("frame", frame_number, "vector", vector, "range", range, "rect", rect, end="\r")
 
 		# Determine the new vector
 		# Determine the new speed
