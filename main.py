@@ -12,6 +12,7 @@ GPIO.setmode(GPIO.BCM)
 trig_pin = 23
 echo_pin = 24
 led_pin = 16
+minimum_feature_size = 500
 
 motor = motor.MotorController()
 
@@ -45,7 +46,7 @@ try:
 		# Verify range to target (one ping only)
 		range = range_sensor.get_reading()
 
-		if rect is None:
+		if (rect is None) or ((rect[2] * rect[3]) < minimum_feature_size):
 			# Don't see no red
 			vector = None
 		else:
@@ -72,11 +73,14 @@ try:
 				right_motor_speed = speed_1
 				left_motor_speed = speed_2
 
-			# Set course for adventure
-			print("left_motor_speed", left_motor_speed, "right_motor_speed", right_motor_speed)
-			motor.set_speed(left_motor_speed, right_motor_speed)
 		else:
-			motor.stop()
+			# Spin in a circle until you find something
+			left_motor_speed = 0.5
+			right_motor_speed = -0.5
+
+		# Set course for adventure
+		print("left_motor_speed", left_motor_speed, "right_motor_speed", right_motor_speed)
+		motor.set_speed(left_motor_speed, right_motor_speed)
 
 		# Clear out for next frame
 		rawCapture.truncate(0)
