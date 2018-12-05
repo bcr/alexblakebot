@@ -12,7 +12,7 @@ try:
 	rawCapture = PiRGBArray(camera, size=(640, 480))
 
 	# allow the camera to warmup
-	time.sleep(0.1)
+	time.sleep(2.0)
 
 	frame_number = 1
 
@@ -24,6 +24,7 @@ try:
 
 		# Write out the frame
 
+		print("rect", rect)
 		[x,y,w,h] = rect
 		cv2.rectangle(raw_frame,(x,y),(x+w,y+h),(0,255,0),5)
 
