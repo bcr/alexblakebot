@@ -66,7 +66,7 @@ try:
 			speed_1 = absvector * speed
 			speed_2 = (1.0 - absvector) * speed
 
-			if (vector < 0):
+			if (vector > 0):
 				left_motor_speed = speed_1
 				right_motor_speed = speed_2
 			else:
